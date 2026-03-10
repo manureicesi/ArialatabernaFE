@@ -29,16 +29,24 @@ const Navbar: React.FC<NavbarProps> = ({ currentSection, onNavigate, isLightBack
     { label: 'Traballa con nós', id: Section.CAREERS },
   ];
 
+  const isHome = currentSection === Section.HOME;
+
   // Determine colors based on scroll and page theme
-  const useDarkText = isLightBackground && !isScrolled;
+  const useDarkText = isScrolled ? (isLightBackground || isHome) : isLightBackground;
   const textColorClass = useDarkText ? 'text-black' : 'text-white';
   const logoColorClass = useDarkText ? 'text-black' : 'text-white';
 
+  const containerClassName = `fixed top-0 w-full z-40 transition-all duration-300 ease-in-out px-6 md:px-12 py-4 ${
+    isScrolled
+      ? useDarkText
+        ? 'bg-white/90 backdrop-blur-md shadow-lg py-3'
+        : 'bg-black/90 backdrop-blur-md shadow-lg py-3'
+      : 'bg-transparent py-6'
+  }`;
+
   return (
     <nav 
-      className={`fixed top-0 w-full z-40 transition-all duration-300 ease-in-out px-6 md:px-12 py-4 ${
-        isScrolled ? 'bg-black/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-6'
-      }`}
+      className={containerClassName}
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div 
@@ -81,7 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentSection, onNavigate, isLightBack
 
       {/* Mobile Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-black border-t border-gray-800 p-6 flex flex-col gap-4 shadow-xl">
+        <div className={`md:hidden absolute top-full left-0 w-full border-t p-6 flex flex-col gap-4 shadow-xl ${useDarkText ? 'bg-white border-gray-200' : 'bg-black border-gray-800'}`}>
            {navItems.map((item) => (
             <button
               key={item.id}
@@ -90,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentSection, onNavigate, isLightBack
                 setMobileMenuOpen(false);
               }}
               className={`text-left text-lg uppercase tracking-widest ${
-                currentSection === item.id ? 'text-[#4a5d23]' : 'text-white'
+                currentSection === item.id ? 'text-[#4a5d23]' : useDarkText ? 'text-black' : 'text-white'
               }`}
             >
               {item.label}

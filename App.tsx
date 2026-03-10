@@ -389,10 +389,10 @@ const App: React.FC = () => {
     );
   }
 
-  const isLightBackground = activeSection === Section.MENU || activeSection === Section.CAREERS;
+  const isLightBackground = activeSection !== Section.HOME;
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#4a5d23] flex flex-col">
+    <div className="min-h-screen bg-[#fbfbfb] text-black font-sans selection:bg-[#4a5d23] flex flex-col">
       <Navbar currentSection={activeSection} onNavigate={navigateToSection} isLightBackground={isLightBackground} />
       <main className="flex-grow">
         {activeSection === Section.HOME && (
@@ -436,18 +436,18 @@ const App: React.FC = () => {
               </div>
             </section>
             
-            <section className="py-32 px-6 bg-black">
+            <section className="py-32 px-6 bg-[#fbfbfb] text-black">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="w-16 h-[2px] bg-[#4a5d23] mx-auto mb-12"></div>
                 <h2 className="text-4xl md:text-6xl font-black uppercase mb-10 tracking-tighter">A RIALA TABERNA</h2>
-                <p className="text-gray-400 max-w-2xl mx-auto italic text-xl leading-loose mb-12">
+                <p className="text-gray-600 max-w-2xl mx-auto italic text-xl leading-loose mb-12">
                   No corazón da Estrada, recuperamos a esencia das tabernas de sempre cunha ollada contemporánea. Un punto de encontro cultural onde o produto galego e os viños de autor son os protagonistas.
                 </p>
 
                 {scheduleText ? (
-                  <div className="max-w-xl mx-auto mb-14 border border-gray-900 bg-[#0a0a0a] p-8">
+                  <div className="max-w-xl mx-auto mb-14 border border-gray-200 bg-white p-8">
                     <div className="text-[#4a5d23] font-bold tracking-[0.4em] text-xs uppercase mb-4">HORARIO</div>
-                    <div className="text-gray-200 text-base md:text-lg whitespace-pre-line leading-relaxed font-semibold">
+                    <div className="text-gray-800 text-base md:text-lg whitespace-pre-line leading-relaxed font-semibold">
                       {scheduleText.replace(/\s*\|\s*/g, '\n')}
                     </div>
                   </div>
@@ -456,21 +456,21 @@ const App: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                   <div>
                     <h3 className="text-[#4a5d23] font-bold uppercase tracking-widest text-xs mb-4">Cociña</h3>
-                    <p className="text-sm text-gray-500">Sabores auténticos e honestos con materia prima de proximidade.</p>
+                    <p className="text-sm text-gray-600">Sabores auténticos e honestos con materia prima de proximidade.</p>
                   </div>
                   <div>
                     <h3 className="text-[#4a5d23] font-bold uppercase tracking-widest text-xs mb-4">Adega</h3>
-                    <p className="text-sm text-gray-500">Unha viaxe polas D.O. galegas e seleccións exclusivas de viticultores.</p>
+                    <p className="text-sm text-gray-600">Unha viaxe polas D.O. galegas e seleccións exclusivas de viticultores.</p>
                   </div>
                   <div>
                     <h3 className="text-[#4a5d23] font-bold uppercase tracking-widest text-xs mb-4">Cultura</h3>
-                    <p className="text-sm text-gray-500">Exposicións, música e encontros que dan vida ao noso espazo.</p>
+                    <p className="text-sm text-gray-600">Exposicións, música e encontros que dan vida ao noso espazo.</p>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section className="py-24 px-6 bg-black">
+            <section className="py-24 px-6 bg-white text-black">
               <div className="max-w-5xl mx-auto text-center">
                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
                   A RIALA TABERNA NON É SÓ UN SITIO ONDE COMER OU BEBER: É UN LUGAR ONDE PASAR, QUEDAR... E VOLVER.
@@ -487,7 +487,7 @@ const App: React.FC = () => {
         )}
 
         {activeSection === Section.EVENTS && (
-          <div className="pt-40 pb-32 px-6 md:px-12 bg-[#0a0a0a] min-h-screen">
+          <div className="pt-40 pb-32 px-6 md:px-12 bg-[#fbfbfb] min-h-screen text-black">
             <div className="max-w-7xl mx-auto">
               <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
                 <div>
@@ -500,7 +500,7 @@ const App: React.FC = () => {
                       key={cat} 
                       onClick={() => setEventFilter(cat)}
                       className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all border ${
-                        eventFilter === cat ? 'bg-[#4a5d23] border-[#4a5d23] text-white' : 'border-gray-800 text-gray-500 hover:text-white'
+                        eventFilter === cat ? 'bg-[#4a5d23] border-[#4a5d23] text-white' : 'border-gray-200 text-gray-500 hover:text-black hover:border-black'
                       }`}
                     >
                       {cat}
@@ -513,7 +513,7 @@ const App: React.FC = () => {
                 {filteredEvents.map(event => (
                   <div 
                     key={event.id} 
-                    className="group bg-[#111] border border-gray-900 overflow-hidden cursor-pointer transition-all duration-500 hover:border-[#4a5d23]/50" 
+                    className="group bg-white border border-gray-200 overflow-hidden cursor-pointer transition-all duration-500 hover:border-[#4a5d23]/50" 
                     onClick={() => setSelectedEvent(event)}
                   >
                     <div className="aspect-[4/3] overflow-hidden">
@@ -526,9 +526,9 @@ const App: React.FC = () => {
                       </div>
                       <h3 className="text-2xl font-bold uppercase tracking-tight mb-4 group-hover:text-[#4a5d23] transition-colors">{event.title}</h3>
                       <p className="text-gray-500 text-sm line-clamp-2 italic">{event.description}</p>
-                      <div className="mt-8 pt-6 border-t border-gray-900 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-white/40">
+                      <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-black/50">
                         <span>{event.time}</span>
-                        <span className="group-hover:text-white transition-colors">Saber máis +</span>
+                        <span className="group-hover:text-black transition-colors">Saber máis +</span>
                       </div>
                     </div>
                   </div>
@@ -550,24 +550,24 @@ const App: React.FC = () => {
         )}
         
         {activeSection === Section.RESERVATIONS && (
-          <div className="pt-40 pb-32 px-6 bg-black min-h-screen flex items-center">
+          <div className="pt-40 pb-32 px-6 bg-[#fbfbfb] min-h-screen flex items-center text-black">
              <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                <div>
                   <h2 className="text-6xl md:text-7xl font-black mb-8 uppercase tracking-tighter leading-none">RESERVA A TÚA <span className="text-[#4a5d23]">EXPERIENCIA</span></h2>
-                  <p className="text-xl text-gray-400 italic mb-12">Para mesas de máis de 8 persoas ou eventos privados, por favor contacta directamente por teléfono.</p>
-                  <div className="space-y-4 text-gray-400">
+                  <p className="text-xl text-gray-600 italic mb-12">Para mesas de máis de 8 persoas ou eventos privados, por favor contacta directamente por teléfono.</p>
+                  <div className="space-y-4 text-gray-600">
                     <p className="flex items-center gap-4"><span className="w-8 h-[1px] bg-[#4a5d23]"></span> Tel: {contactPhone || '+34 986 XX XX XX'}</p>
                     <p className="flex items-center gap-4"><span className="w-8 h-[1px] bg-[#4a5d23]"></span> Mail: {contactMail || 'reservas@ariala.gal'}</p>
                     <p className="flex items-center gap-4"><span className="w-8 h-[1px] bg-[#4a5d23]"></span> Zona dos Viños, A Estrada</p>
                   </div>
                </div>
-               <div className="bg-[#111] p-10 border border-gray-900 shadow-2xl relative overflow-hidden">
+              <div className="bg-white p-10 border border-gray-200 shadow-2xl relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-full h-1 bg-[#4a5d23]"></div>
 
                   {!isReservationsEnabled && (
-                    <div className="mb-8 border border-gray-800 bg-black/30 p-6">
+                    <div className="mb-8 border border-gray-200 bg-[#fbfbfb] p-6">
                       <div className="text-[#4a5d23] text-xs font-bold uppercase tracking-[0.4em] mb-3">Reservas non dispoñibles</div>
-                      <p className="text-gray-400 text-sm italic leading-relaxed">
+                      <p className="text-gray-600 text-sm italic leading-relaxed">
                         Neste momento as reservas están desactivadas. Por favor, contacta connosco por teléfono ou email.
                       </p>
                     </div>
@@ -577,11 +577,11 @@ const App: React.FC = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] uppercase font-bold tracking-widest text-gray-500">Data</label>
-                          <input type="date" required value={formDate} onChange={e => setFormDate(e.target.value)} className="w-full bg-black border border-gray-800 p-4 text-white disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                          <input type="date" required value={formDate} onChange={e => setFormDate(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] uppercase font-bold tracking-widest text-gray-500">Hora</label>
-                          <select required value={formTime} onChange={e => setFormTime(e.target.value)} className="w-full bg-black border border-gray-800 p-4 text-white disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled || !formDate || isLoadingAvailability || availableTimes.length === 0}>
+                          <select required value={formTime} onChange={e => setFormTime(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled || !formDate || isLoadingAvailability || availableTimes.length === 0}>
                               <option value="">{formDate ? (isLoadingAvailability ? 'Cargando...' : (availableTimes.length > 0 ? 'Escoller' : 'Non dispoñible')) : '—'}</option>
                               {availableTimes.map(t => <option key={t} value={t}>{t}</option>)}
                           </select>
@@ -590,14 +590,14 @@ const App: React.FC = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] uppercase font-bold tracking-widest text-gray-500">Comensais</label>
-                          <input type="number" min="1" max="8" required value={formGuests} onChange={e => setFormGuests(parseInt(e.target.value))} className="w-full bg-black border border-gray-800 p-4 text-white disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                          <input type="number" min="1" max="8" required value={formGuests} onChange={e => setFormGuests(parseInt(e.target.value))} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] uppercase font-bold tracking-widest text-gray-500">Nome</label>
-                          <input type="text" placeholder="O teu nome" required value={formName} onChange={e => setFormName(e.target.value)} className="w-full bg-black border border-gray-800 p-4 text-white disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                          <input type="text" placeholder="O teu nome" required value={formName} onChange={e => setFormName(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
                         </div>
                       </div>
-                      <input type="email" placeholder="Correo electrónico" required value={formEmail} onChange={e => setFormEmail(e.target.value)} className="w-full bg-black border border-gray-800 p-4 text-white disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                      <input type="email" placeholder="Correo electrónico" required value={formEmail} onChange={e => setFormEmail(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
                       <button type="submit" className="w-full bg-[#4a5d23] py-5 uppercase font-black tracking-widest hover:bg-[#5b722d] transition-all shadow-xl disabled:opacity-30 disabled:hover:bg-[#4a5d23]" disabled={!isReservationsEnabled}>Solicitar Confirmación</button>
                   </form>
                   {formSuccess && <p className="mt-6 text-green-500 text-center font-bold animate-in fade-in slide-in-from-top-2">Recibimos a túa solicitude. Confirmaremos por email!</p>}
@@ -606,47 +606,47 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {activeSection === Section.PROJECTS && <div className="pt-40 pb-32 px-6 bg-[#0d0d0d] min-h-screen"><ProjectSection onSubmit={handleProposalSubmit} /></div>}
+        {activeSection === Section.PROJECTS && <div className="pt-40 pb-32 px-6 bg-[#fbfbfb] min-h-screen text-black"><ProjectSection onSubmit={handleProposalSubmit} /></div>}
         
         {activeSection === Section.CAREERS && (
           <div className="pt-40 pb-32 px-6 bg-white text-black min-h-screen flex flex-col items-center justify-center text-center">
             <h2 className="text-6xl md:text-8xl font-black uppercase mb-8 tracking-tighter">EQUIPO</h2>
             <p className="text-2xl max-w-2xl italic text-gray-600 leading-relaxed mb-12">Buscamos persoas con paixón pola hostalería e a cultura que queiran formar parte dun proxecto diferente na Estrada.</p>
-            <a href="mailto:info@ariala.gal" className="bg-black text-white px-12 py-5 uppercase font-bold tracking-widest hover:bg-[#4a5d23] transition-all">Envíanos o teu CV</a>
+            <a href="mailto:info@ariala.gal" className="bg-[#4a5d23] text-white px-12 py-5 uppercase font-bold tracking-widest hover:bg-[#5b722d] transition-all shadow-xl">Envíanos o teu CV</a>
           </div>
         )}
         
-        {(activeSection === Section.LEGAL || activeSection === Section.PRIVACY || activeSection === Section.COOKIES) && <div className="pt-32 min-h-screen bg-[#0d0d0d]"><LegalSection activeTab={activeSection} /></div>}
+        {(activeSection === Section.LEGAL || activeSection === Section.PRIVACY || activeSection === Section.COOKIES) && <div className="pt-32 min-h-screen bg-[#fbfbfb] text-black"><LegalSection activeTab={activeSection} /></div>}
       </main>
 
-      <footer className="bg-black text-gray-600 py-24 px-6 border-t border-gray-900">
+      <footer className="bg-white text-gray-600 py-24 px-6 border-t border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
             <div className="md:col-span-2">
-              <div className="text-white font-black text-2xl uppercase tracking-tighter mb-8">A RIALA <span className="font-light text-gray-500">TABERNA</span></div>
+              <div className="text-black font-black text-2xl uppercase tracking-tighter mb-8">A RIALA <span className="font-light text-gray-500">TABERNA</span></div>
               <p className="max-w-xs text-sm italic leading-relaxed">Zona dos Viños. Un espazo de encontro cultural e gastronómico no corazón da Estrada.</p>
             </div>
             <div className="space-y-4">
-              <h4 className="text-white text-xs font-bold uppercase tracking-widest mb-6">Navegación</h4>
-              <button onClick={() => navigateToSection(Section.MENU)} className="block hover:text-white transition-colors">A Carta</button>
-              <button onClick={() => navigateToSection(Section.EVENTS)} className="block hover:text-white transition-colors">Axenda</button>
-              <button onClick={() => navigateToSection(Section.RESERVATIONS)} className="block hover:text-white transition-colors">Reservas</button>
+              <h4 className="text-black text-xs font-bold uppercase tracking-widest mb-6">Navegación</h4>
+              <button onClick={() => navigateToSection(Section.MENU)} className="block hover:text-black transition-colors">A Carta</button>
+              <button onClick={() => navigateToSection(Section.EVENTS)} className="block hover:text-black transition-colors">Axenda</button>
+              <button onClick={() => navigateToSection(Section.RESERVATIONS)} className="block hover:text-black transition-colors">Reservas</button>
             </div>
             <div className="space-y-4">
-              <h4 className="text-white text-xs font-bold uppercase tracking-widest mb-6">Legal</h4>
-              <button onClick={() => navigateToSection(Section.LEGAL)} className="block hover:text-white transition-colors">Aviso Legal</button>
-              <button onClick={() => navigateToSection(Section.PRIVACY)} className="block hover:text-white transition-colors">Privacidade</button>
-              <button onClick={() => navigateToSection(Section.COOKIES)} className="block hover:text-white transition-colors">Cookies</button>
+              <h4 className="text-black text-xs font-bold uppercase tracking-widest mb-6">Legal</h4>
+              <button onClick={() => navigateToSection(Section.LEGAL)} className="block hover:text-black transition-colors">Aviso Legal</button>
+              <button onClick={() => navigateToSection(Section.PRIVACY)} className="block hover:text-black transition-colors">Privacidade</button>
+              <button onClick={() => navigateToSection(Section.COOKIES)} className="block hover:text-black transition-colors">Cookies</button>
             </div>
           </div>
-          <div className="pt-12 border-t border-gray-900 text-[10px] font-bold uppercase tracking-widest">
+          <div className="pt-12 border-t border-gray-200 text-[10px] font-bold uppercase tracking-widest">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="w-full md:w-auto md:flex-1 flex justify-start">
-                <button onClick={() => navigateToSection(Section.CMR)} className="border border-gray-800 px-4 py-2 hover:border-white hover:text-white transition-all">Acceso Admin</button>
+                <button onClick={() => navigateToSection(Section.CMR)} className="border border-gray-200 px-4 py-2 hover:border-black hover:text-black transition-all">Acceso Admin</button>
               </div>
               <p className="w-full md:w-auto md:flex-1 text-center md:text-center">&copy; {new Date().getFullYear()} A Riala Taberna. Todos os dereitos reservados.</p>
               <div className="w-full md:w-auto md:flex-1 flex justify-end">
-                <a href="https://instagram.com/arialataberna" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+                <a href="https://instagram.com/arialataberna" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Instagram</a>
               </div>
             </div>
           </div>
@@ -656,13 +656,13 @@ const App: React.FC = () => {
 
       {selectedEvent && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/98 backdrop-blur-md" onClick={() => setSelectedEvent(null)}></div>
-            <div className="relative bg-[#111] border border-gray-800 max-w-5xl w-full flex flex-col md:flex-row overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={() => setSelectedEvent(null)}></div>
+            <div className="relative bg-white border border-gray-200 max-w-5xl w-full flex flex-col md:flex-row overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
                 <div className="md:w-1/2 aspect-square md:aspect-auto"><img src={selectedEvent.image} alt="" className="w-full h-full object-cover grayscale" /></div>
                 <div className="md:w-1/2 p-12 flex flex-col justify-center">
                     <span className="text-[#4a5d23] font-bold text-xs uppercase tracking-[0.4em] mb-4 block">{selectedEvent.category}</span>
                     <h2 className="text-5xl font-black mb-8 uppercase tracking-tighter leading-none">{selectedEvent.title}</h2>
-                    <div className="flex gap-8 mb-10 text-xs font-bold uppercase tracking-widest text-white/60">
+                    <div className="flex gap-8 mb-10 text-xs font-bold uppercase tracking-widest text-black/60">
                       <div className="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#4a5d23]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -676,7 +676,7 @@ const App: React.FC = () => {
                         {selectedEvent.time}
                       </div>
                     </div>
-                    <p className="text-gray-400 mb-12 italic text-lg leading-relaxed">{selectedEvent.description}</p>
+                    <p className="text-gray-600 mb-12 italic text-lg leading-relaxed">{selectedEvent.description}</p>
                     <button onClick={() => setSelectedEvent(null)} className="w-full bg-[#4a5d23] text-white py-5 uppercase font-black tracking-widest hover:bg-[#5b722d] transition-all shadow-xl">Pechar Detalle</button>
                 </div>
             </div>

@@ -29,20 +29,20 @@ const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[#1a1a1a] border-t border-gray-800 p-6 z-50 animate-in slide-in-from-bottom duration-500 shadow-2xl">
+    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-6 z-50 animate-in slide-in-from-bottom duration-500 shadow-2xl">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="text-gray-300 text-sm md:flex-1">
+        <div className="text-gray-700 text-sm md:flex-1">
           <p className="mb-2">
             <strong>Uso de Cookies:</strong> Utilizamos cookies propias e de terceiros para mellorar a túa experiencia de navegación e analizar o uso da web.
           </p>
           <p className="text-xs text-gray-500">
-            Podes obter máis información na nosa <button onClick={() => onNavigate(Section.COOKIES)} className="underline hover:text-white">Política de Cookies</button>.
+            Podes obter máis información na nosa <button onClick={() => onNavigate(Section.COOKIES)} className="underline hover:text-black">Política de Cookies</button>.
           </p>
         </div>
         <div className="flex gap-4 flex-shrink-0">
           <button 
             onClick={handleReject}
-            className="px-6 py-2 border border-gray-600 text-gray-300 text-xs font-bold uppercase tracking-widest hover:border-white hover:text-white transition-colors"
+            className="px-6 py-2 border border-gray-300 text-gray-700 text-xs font-bold uppercase tracking-widest hover:border-black hover:text-black transition-colors"
           >
             Rexeitar
           </button>
