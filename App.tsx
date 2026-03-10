@@ -624,6 +624,8 @@ const App: React.FC = () => {
                         </div>
                       </div>
                       <input type="email" placeholder="Correo electrónico" required value={formEmail} onChange={e => setFormEmail(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                      <input type="tel" placeholder="Teléfono" value={formPhone} onChange={e => setFormPhone(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors" disabled={!isReservationsEnabled} />
+                      <textarea placeholder="Comentarios" value={formObservations} onChange={e => setFormObservations(e.target.value)} className="w-full bg-white border border-gray-200 p-4 text-black disabled:opacity-30 focus:border-[#4a5d23] outline-none transition-colors min-h-[120px] resize-y" disabled={!isReservationsEnabled} />
                       <button type="submit" className="w-full bg-[#4a5d23] py-5 uppercase font-black tracking-widest hover:bg-[#5b722d] transition-all shadow-xl disabled:opacity-30 disabled:hover:bg-[#4a5d23]" disabled={!isReservationsEnabled}>Solicitar Confirmación</button>
                       {formError && (
                         <div className="border border-red-200 bg-red-50 text-red-700 p-4 text-sm">
