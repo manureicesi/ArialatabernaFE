@@ -856,7 +856,7 @@ const App: React.FC = () => {
                         </div>
                       )}
                   </form>
-                  {formSuccess && <p className="mt-6 text-green-500 text-center font-bold animate-in fade-in slide-in-from-top-2">Recibimos a túa solicitude. Confirmaremos por email!</p>}
+                  {formSuccess && <p className="mt-6 text-green-500 text-center font-bold animate-in fade-in slide-in-from-top-2">Recibimos a túa solicitude. Confirmaremos por email! (Revisa o spam se non che chega)</p>}
                </div>
              </div>
           </div>
