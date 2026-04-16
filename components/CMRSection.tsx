@@ -789,16 +789,23 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     e.preventDefault();
     if (!auth) return;
 
-    const toIso = (dtLocal: string): string => {
-      const d = new Date(dtLocal);
-      return d.toISOString();
+    const tz = 'Europe/Madrid';
+    const localToUtcIso = (dtLocal: string): string => {
+      const asUtc = new Date(dtLocal + 'Z');
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+      }).formatToParts(asUtc);
+      const g = (t: string) => parts.find((p) => p.type === t)?.value || '00';
+      const tzAsUtc = new Date(`${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}Z`);
+      return new Date(asUtc.getTime() - (tzAsUtc.getTime() - asUtc.getTime())).toISOString();
     };
 
     const payload = {
       title: newEventTitle,
-      dateStart: toIso(newEventDateStart),
-      dateEnd: newEventDateEnd ? toIso(newEventDateEnd) : null,
-      timezone: 'Europe/Madrid',
+      dateStart: localToUtcIso(newEventDateStart),
+      dateEnd: newEventDateEnd ? localToUtcIso(newEventDateEnd) : null,
+      timezone: tz,
       description: newEventDesc,
       category: newEventCat,
       imageUrl: newEventImage || '',
@@ -845,14 +852,27 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     }
   };
 
+  const utcToLocalInput = (iso: string | undefined | null, tz: string): string => {
+      if (!iso) return '';
+      const d = new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(iso) ? iso : iso + 'Z');
+      if (isNaN(d.getTime())) return '';
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false,
+      }).formatToParts(d);
+      const get = (t: string) => parts.find((p) => p.type === t)?.value || '';
+      return `${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}`;
+  };
+
   const handleEditEvent = (event: EventItem) => {
+      const tz = event.timezone || 'Europe/Madrid';
       setNewEventTitle(event.title);
       setNewEventDesc(event.description);
       setNewEventCat(event.category);
       setNewEventImage(event.imageUrl || event.image);
-      setNewEventDateStart(event.dateStart ? event.dateStart.slice(0, 16) : '');
-      setNewEventDateEnd(event.dateEnd ? event.dateEnd.slice(0, 16) : '');
-      setNewEventTimezone(event.timezone || 'Europe/Madrid');
+      setNewEventDateStart(utcToLocalInput(event.dateStart, tz));
+      setNewEventDateEnd(utcToLocalInput(event.dateEnd, tz));
+      setNewEventTimezone(tz);
       setNewEventLocationName(event.locationName || '');
       setNewEventIsPublished(event.isPublished ?? true);
       setEditEventId(event.id);

@@ -9,6 +9,7 @@ type UpcomingEventsSectionProps = {
 };
 
 const toDateValue = (e: EventItem): number => {
+  if (e._sortTs != null && Number.isFinite(e._sortTs)) return e._sortTs;
   if (!e.dateStart) return Number.POSITIVE_INFINITY;
   const raw = e.dateStart;
   const t = new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(raw) ? raw : raw + 'Z').getTime();

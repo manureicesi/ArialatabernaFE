@@ -48,6 +48,7 @@ export interface EventItem {
   locationName?: string | null;
   isPublished?: boolean;
   imageUrl?: string;
+  _sortTs?: number;
 }
 
 export interface ChatMessage {

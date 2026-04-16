@@ -290,14 +290,21 @@ const App: React.FC = () => {
       .getEvents()
       .then((items) => {
         if (cancelled) return;
-        setEvents(
-          items
+        const parseDateUTC = (raw: string | undefined | null): Date | null => {
+          if (!raw) return null;
+          const d = new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(raw) ? raw : raw + 'Z');
+          return isNaN(d.getTime()) ? null : d;
+        };
+        const mapped = items
             .filter((e) => !!e.title)
             .map((e) => {
               const tz = e.timezone || 'Europe/Madrid';
-              const dt = e.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(e.dateStart) ? e.dateStart : e.dateStart + 'Z') : null;
+              const dtStart = parseDateUTC(e.dateStart);
+              const dtEnd = parseDateUTC(e.dateEnd);
+              const dt = (dtStart && dtStart.getFullYear() >= 2000) ? dtStart : dtEnd;
               const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
               const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
+              const sortTs = dt ? dt.getTime() : Number.POSITIVE_INFINITY;
               return {
                 id: e.id,
                 title: e.title,
@@ -312,9 +319,11 @@ const App: React.FC = () => {
                 locationName: e.locationName ?? null,
                 isPublished: e.isPublished,
                 imageUrl: e.imageUrl,
+                _sortTs: sortTs,
               };
             })
-        );
+            .sort((a, b) => a._sortTs - b._sortTs);
+        setEvents(mapped);
       })
       .catch(() => {
         // keep local constants as fallback
@@ -330,8 +339,9 @@ const App: React.FC = () => {
   }, [activeSection]);
 
   const filteredEvents = useMemo(() => {
-    if (eventFilter === 'Todos') return events;
-    return events.filter(e => e.category === eventFilter);
+    const published = events.filter(e => e.isPublished !== false);
+    if (eventFilter === 'Todos') return published;
+    return published.filter(e => e.category === eventFilter);
   }, [events, eventFilter]);
 
   // Reservation Form Logic
