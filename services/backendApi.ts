@@ -152,6 +152,16 @@ export type BackendAdminConfigListResponse = {
   items: Array<BackendAdminConfigItem>;
 };
 
+export type BackendAdminCustomerItem = {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  reservationCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type BackendEventPublicItem = {
   id: string;
   title: string;
@@ -359,6 +369,13 @@ export const backendApi = {
         `/api/v1/admin/reservations/${encodeURIComponent(id)}/cancel`,
         'POST',
         { reason },
+        auth
+      ),
+    listCustomers: (auth: BasicAuth, limit = 100, offset = 0) =>
+      request<Array<BackendAdminCustomerItem>>(
+        `/api/v1/admin/customers?limit=${encodeURIComponent(String(limit))}&offset=${encodeURIComponent(String(offset))}`,
+        'GET',
+        undefined,
         auth
       ),
   },

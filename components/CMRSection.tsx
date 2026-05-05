@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Reservation, MenuItem, EventItem, ProjectProposal, EventCategory } from '../types';
 import { COLORS } from '../constants';
-import { backendApi, BasicAuth, BackendAdminMenuCategoryNode, BackendAdminReservationItem, BackendAvailabilityRangeResponse } from '../services/backendApi';
+import { backendApi, BasicAuth, BackendAdminMenuCategoryNode, BackendAdminReservationItem, BackendAdminCustomerItem, BackendAvailabilityRangeResponse } from '../services/backendApi';
 
 interface CMRSectionProps {
   reservations: Reservation[];
@@ -236,46 +236,8 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     }
   };
 
-  type CustomerRow = {
-    name: string;
-    email: string;
-    phone: string;
-    date: string;
-    createdAt: string;
-  };
-
-  const uniqueCustomers = useMemo<Array<CustomerRow>>(() => {
-    const byEmail = new Map<string, CustomerRow>();
-
-    reservations.forEach((r) => {
-      const key = String(r.email || '').trim().toLowerCase();
-      if (!key) return;
-
-      const next: CustomerRow = {
-        name: r.name,
-        email: r.email,
-        phone: r.phone,
-        date: `${r.date} ${r.time}`,
-        createdAt: r.createdAt,
-      };
-
-      const prev = byEmail.get(key);
-      if (!prev) {
-        byEmail.set(key, next);
-        return;
-      }
-
-      const prevTs = new Date(prev.createdAt).getTime();
-      const nextTs = new Date(next.createdAt).getTime();
-      if (Number.isFinite(nextTs) && (!Number.isFinite(prevTs) || nextTs > prevTs)) {
-        byEmail.set(key, next);
-      }
-    });
-
-    return Array.from(byEmail.values()).sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }, [reservations]);
+  const [customers, setCustomers] = useState<BackendAdminCustomerItem[]>([]);
+  const [isLoadingCustomers, setIsLoadingCustomers] = useState(false);
 
   const projectContactsNewCount = useMemo(() => projectContacts.length, [projectContacts]);
 
@@ -425,6 +387,21 @@ const CMRSection: React.FC<CMRSectionProps> = ({
         })
         .finally(() => {
           setIsLoadingProjectContacts(false);
+        });
+    }
+
+    if (activeTab === 'customers') {
+      setIsLoadingCustomers(true);
+      backendApi.admin
+        .listCustomers(auth, 100, 0)
+        .then((items) => {
+          setCustomers(Array.isArray(items) ? items : []);
+        })
+        .catch(() => {
+          setCustomers([]);
+        })
+        .finally(() => {
+          setIsLoadingCustomers(false);
         });
     }
 
@@ -1981,18 +1958,36 @@ const CMRSection: React.FC<CMRSectionProps> = ({
 
   const renderCustomers = () => (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+       {isLoadingCustomers ? (
+         <div className="px-6 py-8 text-sm text-gray-400 italic">Cargando clientes...</div>
+       ) : customers.length === 0 ? (
+         <div className="px-6 py-8 text-sm text-gray-400 italic">Non hai clientes rexistrados.</div>
+       ) : (
        <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-500 font-bold uppercase text-xs">
-            <tr><th className="px-6 py-4">Nome</th><th className="px-6 py-4">Email</th><th className="px-6 py-4">Teléfono</th><th className="px-6 py-4">Última Visita</th></tr>
+            <tr>
+              <th className="px-6 py-4">Nome</th>
+              <th className="px-6 py-4">Email</th>
+              <th className="px-6 py-4">Teléfono</th>
+              <th className="px-6 py-4">Reservas</th>
+              <th className="px-6 py-4">Rexistro</th>
+            </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {uniqueCustomers.map((cust: CustomerRow) => (
-                <tr key={cust.email} className="hover:bg-gray-50"><td className="px-6 py-4 font-bold text-gray-900">{cust.name}</td><td className="px-6 py-4 text-gray-600">{cust.email}</td><td className="px-6 py-4 text-gray-600">{cust.phone}</td><td className="px-6 py-4 text-gray-400">{cust.date}</td></tr>
+            {customers.map((cust) => (
+                <tr key={cust.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 font-bold text-gray-900">{cust.name}</td>
+                  <td className="px-6 py-4 text-gray-600">{cust.email}</td>
+                  <td className="px-6 py-4 text-gray-600">{cust.phone}</td>
+                  <td className="px-6 py-4 text-gray-600 font-bold">{cust.reservationCount}</td>
+                  <td className="px-6 py-4 text-gray-400">{new Date(cust.createdAt).toLocaleDateString('gl-ES')}</td>
+                </tr>
             ))}
           </tbody>
         </table>
        </div>
+       )}
     </div>
   );
 
