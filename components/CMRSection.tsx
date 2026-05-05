@@ -1390,24 +1390,36 @@ const CMRSection: React.FC<CMRSectionProps> = ({
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                       {events.map((event) => (
-                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''}`}>
+                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''} ${!event.isPublished ? 'opacity-60 bg-gray-50/80' : ''}`}>
                             <td className="px-6 py-3">
-                              <button
-                                onClick={() => handleTogglePublish(event.id, true)}
-                                className="text-[10px] font-bold uppercase text-green-700 hover:text-green-900"
-                              >
-                                Publicar
-                              </button>
-                              <span className="text-gray-300 mx-2">|</span>
-                              <button
-                                onClick={() => handleTogglePublish(event.id, false)}
-                                className="text-[10px] font-bold uppercase text-gray-500 hover:text-gray-800"
-                              >
-                                Ocultar
-                              </button>
+                              <div className="flex flex-col items-center gap-1">
+                                <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${event.isPublished ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                  {event.isPublished ? 'Publicado' : 'Borrador'}
+                                </span>
+                                {event.isPublished ? (
+                                  <button
+                                    onClick={() => handleTogglePublish(event.id, false)}
+                                    className="text-[10px] font-bold uppercase text-gray-500 hover:text-gray-800"
+                                  >
+                                    Ocultar
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => handleTogglePublish(event.id, true)}
+                                    className="text-[10px] font-bold uppercase text-green-700 hover:text-green-900"
+                                  >
+                                    Publicar
+                                  </button>
+                                )}
+                              </div>
                             </td>
                             <td className="px-6 py-3"><img src={event.image} alt="" className="w-12 h-12 object-cover rounded-sm grayscale" /></td>
-                            <td className="px-6 py-3 font-medium text-black">{event.title}</td>
+                            <td className="px-6 py-3 font-medium text-black">
+                              <div className="flex items-center gap-2">
+                                {event.title}
+                                {!event.isPublished && <span className="bg-yellow-100 text-yellow-700 text-[8px] px-1 rounded font-bold uppercase">Non publicado</span>}
+                              </div>
+                            </td>
                             <td className="px-6 py-3 text-gray-500">{event.date} - {event.time}</td>
                             <td className="px-6 py-3"><span className="bg-black text-white text-[10px] px-2 py-1 uppercase">{event.category}</span></td>
                             <td className="px-6 py-3 text-right"><div className="flex justify-end gap-3"><button onClick={() => handleEditEvent(event)} className="text-blue-600 hover:text-blue-800 text-xs font-bold uppercase">Editar</button><button onClick={() => handleDeleteEvent(event.id)} className="text-red-500 hover:text-red-700 text-xs font-bold uppercase">Borrar</button></div></td>
