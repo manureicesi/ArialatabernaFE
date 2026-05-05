@@ -339,9 +339,8 @@ const App: React.FC = () => {
   }, [activeSection]);
 
   const filteredEvents = useMemo(() => {
-    const published = events.filter(e => e.isPublished !== false);
-    if (eventFilter === 'Todos') return published;
-    return published.filter(e => e.category === eventFilter);
+    if (eventFilter === 'Todos') return events;
+    return events.filter(e => e.category === eventFilter);
   }, [events, eventFilter]);
 
   // Reservation Form Logic
