@@ -145,6 +145,9 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const [newMenuSubcategory, setNewMenuSubcategory] = useState('');
   const [newMenuOrden, setNewMenuOrden] = useState('1');
   
+  const [menuSaveError, setMenuSaveError] = useState<string | null>(null);
+  const [eventSaveError, setEventSaveError] = useState<string | null>(null);
+
   // --- EVENT MANAGEMENT STATE ---
   const [editEventId, setEditEventId] = useState<string | null>(null);
   const [newEventTitle, setNewEventTitle] = useState('');
@@ -668,9 +671,10 @@ const CMRSection: React.FC<CMRSectionProps> = ({
           }))
         );
 
+        setMenuSaveError(null);
         resetMenuForm();
       } catch {
-        // keep form state
+        setMenuSaveError('Non se puido gardar o elemento do menú. Inténtao de novo.');
       }
   };
 
@@ -865,9 +869,10 @@ const CMRSection: React.FC<CMRSectionProps> = ({
             };
           })
       );
+      setEventSaveError(null);
       resetEventForm();
     } catch {
-      // keep form state
+      setEventSaveError('Non se puido gardar o evento. Inténtao de novo.');
     }
   };
 
@@ -1035,6 +1040,12 @@ const CMRSection: React.FC<CMRSectionProps> = ({
               <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">
                   {editMenuIndex !== null ? `Editando: ${menuType === 'food' ? foodMenu[editMenuIndex]?.name : wineMenu[editMenuIndex]?.name}` : `Engadir Novo ${menuType === 'food' ? 'Prato' : 'Viño'}`}
               </h3>
+              {menuSaveError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded mb-4 flex items-center justify-between">
+                  <span>{menuSaveError}</span>
+                  <button type="button" onClick={() => setMenuSaveError(null)} className="text-red-500 font-bold text-xs uppercase">✕</button>
+                </div>
+              )}
               <form onSubmit={handleSaveMenuItem} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                   <input type="text" placeholder="Nome" required value={newItemName} onChange={e => setNewItemName(e.target.value)} className="border p-2 rounded text-sm w-full text-black placeholder-gray-400" />
                   
@@ -1329,6 +1340,12 @@ const CMRSection: React.FC<CMRSectionProps> = ({
       <div>
          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8 border-l-4" style={{ borderLeftColor: editEventId !== null ? '#3b82f6' : COLORS.mossGreen }}>
               <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">{editEventId !== null ? 'Editando Evento' : 'Novo Evento'}</h3>
+              {eventSaveError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded mb-4 flex items-center justify-between">
+                  <span>{eventSaveError}</span>
+                  <button type="button" onClick={() => setEventSaveError(null)} className="text-red-500 font-bold text-xs uppercase">✕</button>
+                </div>
+              )}
               <form onSubmit={handleSaveEvent} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
                   <input type="text" placeholder="Título" required value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} className="border p-2 rounded text-sm w-full text-black placeholder-gray-400" />
                   <input type="datetime-local" required value={newEventDateStart} onChange={e => setNewEventDateStart(e.target.value)} className="border p-2 rounded text-sm w-full text-black placeholder-gray-400" />
