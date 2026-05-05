@@ -311,14 +311,14 @@ const App: React.FC = () => {
                 date,
                 time,
                 description: e.description,
-                image: e.imageUrl || 'https://picsum.photos/800/600?grayscale',
+                image: `/api/v1/events/${e.id}/image`,
                 category: (e.category as any) as EventItem['category'],
                 dateStart: e.dateStart,
                 dateEnd: e.dateEnd ?? null,
                 timezone: e.timezone,
                 locationName: e.locationName ?? null,
                 isPublished: e.isPublished,
-                imageUrl: e.imageUrl,
+                imageUrl: `/api/v1/events/${e.id}/image`,
                 _sortTs: sortTs,
               };
             })

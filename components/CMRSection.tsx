@@ -344,38 +344,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     }
 
     if (activeTab === 'events') {
-      backendApi.admin
-        .listEvents(auth)
-        .then((items) => {
-          setEvents(
-            items
-              .filter((it) => !!it.title)
-              .map((it) => {
-                const tz = it.timezone || 'Europe/Madrid';
-                const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
-                const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
-                const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
-                return {
-                  id: it.id,
-                  title: it.title,
-                  date,
-                  time,
-                  description: it.description,
-                  image: it.imageUrl || 'https://picsum.photos/800/600?grayscale',
-                  category: (it.category as any) as EventItem['category'],
-                  dateStart: it.dateStart,
-                  dateEnd: it.dateEnd ?? null,
-                  timezone: it.timezone,
-                  locationName: it.locationName ?? null,
-                  isPublished: it.isPublished,
-                  imageUrl: it.imageUrl,
-                };
-              })
-          );
-        })
-        .catch(() => {
-          // ignore
-        });
+      refreshEvents(auth);
     }
 
     if (activeTab === 'proposals') {
@@ -808,6 +777,39 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     }
   };
 
+  const refreshEvents = async (authCtx: BasicAuth) => {
+    try {
+      const items = await backendApi.admin.listEvents(authCtx);
+      setEvents(
+        items
+          .filter((it) => !!it.title)
+          .map((it) => {
+            const tz = it.timezone || 'Europe/Madrid';
+            const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
+            const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
+            const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
+            return {
+              id: it.id,
+              title: it.title,
+              date,
+              time,
+              description: it.description,
+              image: `/api/v1/events/${it.id}/image`,
+              category: (it.category as any) as EventItem['category'],
+              dateStart: it.dateStart,
+              dateEnd: it.dateEnd ?? null,
+              timezone: it.timezone,
+              locationName: it.locationName ?? null,
+              isPublished: it.isPublished,
+              imageUrl: `/api/v1/events/${it.id}/image`,
+            };
+          })
+      );
+    } catch {
+      // ignore
+    }
+  };
+
   const handleSaveEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth) return;
@@ -843,32 +845,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
         await backendApi.admin.createEvent(auth, payload);
       }
 
-      const items = await backendApi.admin.listEvents(auth);
-      setEvents(
-        items
-          .filter((it) => !!it.title)
-          .map((it) => {
-            const tz = it.timezone || 'Europe/Madrid';
-            const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
-            const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
-            const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
-            return {
-              id: it.id,
-              title: it.title,
-              date,
-              time,
-              description: it.description,
-              image: it.imageUrl || 'https://picsum.photos/800/600?grayscale',
-              category: (it.category as any) as EventItem['category'],
-              dateStart: it.dateStart,
-              dateEnd: it.dateEnd ?? null,
-              timezone: it.timezone,
-              locationName: it.locationName ?? null,
-              isPublished: it.isPublished,
-              imageUrl: it.imageUrl,
-            };
-          })
-      );
+      await refreshEvents(auth);
       setEventSaveError(null);
       resetEventForm();
     } catch {
@@ -907,32 +884,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     if (!auth) return;
     try {
       await backendApi.admin.deleteEvent(auth, id);
-      const items = await backendApi.admin.listEvents(auth);
-      setEvents(
-        items
-          .filter((it) => !!it.title)
-          .map((it) => {
-            const tz = it.timezone || 'Europe/Madrid';
-            const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
-            const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
-            const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
-            return {
-              id: it.id,
-              title: it.title,
-              date,
-              time,
-              description: it.description,
-              image: it.imageUrl || 'https://picsum.photos/800/600?grayscale',
-              category: (it.category as any) as EventItem['category'],
-              dateStart: it.dateStart,
-              dateEnd: it.dateEnd ?? null,
-              timezone: it.timezone,
-              locationName: it.locationName ?? null,
-              isPublished: it.isPublished,
-              imageUrl: it.imageUrl,
-            };
-          })
-      );
+      await refreshEvents(auth);
       if (editEventId === id) resetEventForm();
     } catch {
       // ignore
@@ -947,32 +899,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
       } else {
         await backendApi.admin.unpublishEvent(auth, eventId);
       }
-      const items = await backendApi.admin.listEvents(auth);
-      setEvents(
-        items
-          .filter((it) => !!it.title)
-          .map((it) => {
-            const tz = it.timezone || 'Europe/Madrid';
-            const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
-            const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
-            const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
-            return {
-              id: it.id,
-              title: it.title,
-              date,
-              time,
-              description: it.description,
-              image: it.imageUrl || 'https://picsum.photos/800/600?grayscale',
-              category: (it.category as any) as EventItem['category'],
-              dateStart: it.dateStart,
-              dateEnd: it.dateEnd ?? null,
-              timezone: it.timezone,
-              locationName: it.locationName ?? null,
-              isPublished: it.isPublished,
-              imageUrl: it.imageUrl,
-            };
-          })
-      );
+      await refreshEvents(auth);
     } catch {
       // ignore
     }

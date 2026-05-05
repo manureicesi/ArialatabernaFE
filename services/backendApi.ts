@@ -170,7 +170,7 @@ export type BackendEventPublicItem = {
   timezone?: string;
   description: string;
   category: string;
-  imageUrl: string;
+  imageUrl?: string;
   locationName?: string | null;
   isPublished?: boolean;
 };
@@ -188,7 +188,7 @@ export type BackendEventAdminItem = {
   timezone?: string;
   description: string;
   category: string;
-  imageUrl: string;
+  imageUrl?: string;
   locationName?: string | null;
   isPublished?: boolean;
   createdAt?: string;
