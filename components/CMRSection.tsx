@@ -798,7 +798,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
               dateEnd: it.dateEnd ?? null,
               timezone: it.timezone,
               locationName: it.locationName ?? null,
-              isPublished: it.isPublished ?? false,
+              isPublished: it.isPublished,
               imageUrl: `/api/v1/events/${it.id}/image`,
             };
           });
