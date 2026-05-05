@@ -144,7 +144,9 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const [newMenuCategory, setNewMenuCategory] = useState('');
   const [newMenuSubcategory, setNewMenuSubcategory] = useState('');
   const [newMenuOrden, setNewMenuOrden] = useState('1');
-  
+
+  const [adminEvents, setAdminEvents] = useState<EventItem[]>(events);
+
   const [menuSaveError, setMenuSaveError] = useState<string | null>(null);
   const [eventSaveError, setEventSaveError] = useState<string | null>(null);
 
@@ -344,7 +346,6 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     }
 
     if (activeTab === 'events') {
-      console.log('Calling refreshEvents for events tab');
       refreshEvents(auth);
     }
 
@@ -781,8 +782,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const refreshEvents = async (authCtx: BasicAuth) => {
     try {
       const items = await backendApi.admin.listEvents(authCtx);
-      setEvents(
-        items
+      const mapped = items
           .filter((it) => !!it.title)
           .map((it) => {
             const tz = it.timezone || 'Europe/Madrid';
@@ -804,8 +804,9 @@ const CMRSection: React.FC<CMRSectionProps> = ({
               isPublished: it.isPublished ?? false,
               imageUrl: `/api/v1/events/${it.id}/image`,
             };
-          })
-      );
+          });
+      setAdminEvents(mapped);
+      setEvents(mapped);
     } catch {
       // ignore
     }
@@ -1317,8 +1318,8 @@ const CMRSection: React.FC<CMRSectionProps> = ({
                       <tr><th className="px-6 py-3">Estado</th><th className="px-6 py-3">Miniatura</th><th className="px-6 py-3">Evento</th><th className="px-6 py-3">Data/Hora</th><th className="px-6 py-3">Tipo</th><th className="px-6 py-3 text-right">Acción</th></tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                      {events.map((event) => (
-                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''} `}>
+                      {adminEvents.map((event) => (
+                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''} ${!event.isPublished ? 'opacity-60 bg-gray-50/80' : ''}`}>
                             <td className="px-6 py-3">
                               <div className="flex flex-col items-center gap-1">
                                 <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${event.isPublished ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
