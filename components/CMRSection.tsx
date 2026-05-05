@@ -145,7 +145,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const [newMenuSubcategory, setNewMenuSubcategory] = useState('');
   const [newMenuOrden, setNewMenuOrden] = useState('1');
 
-  const [adminEvents, setAdminEvents] = useState<EventItem[]>();
+  const [adminEvents, setAdminEvents] = useState('');
 
   const [menuSaveError, setMenuSaveError] = useState<string | null>(null);
   const [eventSaveError, setEventSaveError] = useState<string | null>(null);
