@@ -783,7 +783,6 @@ const CMRSection: React.FC<CMRSectionProps> = ({
     try {
       const items = await backendApi.admin.listEvents(authCtx);
       const mapped = items
-          .filter((it) => !!it.title)
           .map((it) => {
             const tz = it.timezone || 'Europe/Madrid';
             const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
@@ -1319,7 +1318,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                       {adminEvents.map((event) => (
-                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''} ${!event.isPublished ? 'opacity-60 bg-gray-50/80' : ''}`}>
+                          <tr key={event.id} className={`hover:bg-gray-50 ${editEventId === event.id ? 'bg-blue-50' : ''} `}>
                             <td className="px-6 py-3">
                               <div className="flex flex-col items-center gap-1">
                                 <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${event.isPublished ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
