@@ -786,7 +786,10 @@ const CMRSection: React.FC<CMRSectionProps> = ({
       console.log('Backend events sample:', items.slice(0, 3));
       const mapped = items
           .map((it) => {
-            const tz = it.timezone || 'Europe/Madrid';
+            let tz = it.timezone || 'Europe/Madrid';
+            if (!/^[A-Za-z]+\/[A-Za-z_]+$/.test(tz)) {
+              tz = 'Europe/Madrid';
+            }
             const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
             const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
             const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
