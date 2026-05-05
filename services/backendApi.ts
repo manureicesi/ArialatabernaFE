@@ -295,7 +295,7 @@ export const backendApi = {
       request<BackendAdminProjectContactStatsResponse>('/api/v1/admin/contacts/projects/stats', 'GET', undefined, auth),
     markProjectContactRead: (auth: BasicAuth, id: string) =>
       request<void>(`/api/v1/admin/contacts/projects/${encodeURIComponent(id)}/read`, 'POST', undefined, auth),
-    listEvents: (auth: BasicAuth) => request<BackendEventAdminListResponse>('/api/v1/admin/events', 'GET', undefined, auth).then(extractAdminEventList),
+    listEvents: (auth: BasicAuth) => request<BackendEventAdminListResponse>('/api/v1/admin/events?limit=100', 'GET', undefined, auth).then(extractAdminEventList),
     createEvent: (auth: BasicAuth, payload: BackendEventCreatePayload) => request<{ id: string }>('/api/v1/admin/events', 'POST', payload, auth),
     updateEvent: (auth: BasicAuth, id: string, payload: BackendEventUpdatePayload) =>
       request<void>(`/api/v1/admin/events/${encodeURIComponent(id)}`, 'PUT', payload, auth),
