@@ -782,8 +782,6 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const refreshEvents = async (authCtx: BasicAuth) => {
     try {
       const items = await backendApi.admin.listEvents(authCtx);
-      console.log('Backend events count:', items.length);
-      console.log('Backend events sample:', items.slice(0, 3));
       const mapped = items
           .map((it) => {
             let tz = it.timezone || 'Europe/Madrid';
@@ -809,8 +807,6 @@ const CMRSection: React.FC<CMRSectionProps> = ({
               imageUrl: `/api/v1/events/${it.id}/image`,
             };
           });
-      console.log('Mapped events count:', mapped.length);
-      console.log('Setting adminEvents and events');
       setAdminEvents(mapped);
       setEvents(mapped);
       console.log('adminEvents state after set:', adminEvents.length);
