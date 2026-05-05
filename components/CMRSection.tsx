@@ -780,6 +780,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
   const refreshEvents = async (authCtx: BasicAuth) => {
     try {
       const items = await backendApi.admin.listEvents(authCtx);
+      console.log('Backend events:', items.map(i => ({ id: i.id, title: i.title, isPublished: i.isPublished })));
       setEvents(
         items
           .filter((it) => !!it.title)
@@ -788,7 +789,7 @@ const CMRSection: React.FC<CMRSectionProps> = ({
             const dt = it.dateStart ? new Date(/[Zz+\-]\d{0,4}:?\d{0,2}$/.test(it.dateStart) ? it.dateStart : it.dateStart + 'Z') : null;
             const date = dt ? dt.toLocaleDateString('gl-ES', { day: '2-digit', month: 'short', timeZone: tz }).toUpperCase() : '';
             const time = dt ? dt.toLocaleTimeString('gl-ES', { hour: '2-digit', minute: '2-digit', timeZone: tz }) : '';
-            return {
+            const mapped = {
               id: it.id,
               title: it.title,
               date,
@@ -803,6 +804,8 @@ const CMRSection: React.FC<CMRSectionProps> = ({
               isPublished: it.isPublished ?? false,
               imageUrl: `/api/v1/events/${it.id}/image`,
             };
+            console.log('Mapped event:', { id: mapped.id, title: mapped.title, isPublished: mapped.isPublished });
+            return mapped;
           })
       );
     } catch {
